@@ -1,0 +1,34 @@
+using System;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace API.Extensions;
+
+public static class ApplicationServiceExtensions
+{
+
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddControllersWithViews();
+
+        services.AddDbContext<DataContext>(opt =>
+        {
+            opt.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+        });
+
+        // Add CORS
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularClient", policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
+        services.AddScoped<Interfaces.ITokenService, Services.TokenService>();
+
+        return services;
+    }
+}
