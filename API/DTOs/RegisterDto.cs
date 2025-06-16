@@ -6,7 +6,7 @@ public class RegisterDto
 {
     [Required]
     
-    public string Username { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
 
     [Required]
     [StringLength(8, MinimumLength = 4 )]
